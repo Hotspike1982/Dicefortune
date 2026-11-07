@@ -1,0 +1,9 @@
+Dice Fortune Fun - Android project
+
+1. Maak een GitHub repository met naam DiceFortuneFun.
+2. Pak deze ZIP uit en upload de inhoud, inclusief de verborgen .github map, naar de root van je repository.
+3. GitHub Actions bouwt automatisch de APK na een push naar main.
+4. Open Actions > Bouw Android APK > laatste succesvolle run > Artifacts > DiceFortuneFun-APK.
+5. Download en pak het artifact uit om app-debug.apk te installeren.
+
+Dit is een offline simulatie met virtuele credits, geen echt geld.

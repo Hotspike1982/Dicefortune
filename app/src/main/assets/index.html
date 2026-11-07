@@ -1,5 +1,685 @@
-<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dice Fortune Fun</title><style>
-:root{font-family:Arial,Helvetica,sans-serif;color:#eafaff;background:#08051c}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 35%,#172f9c,#090e4e 48%,#10001d 90%);min-height:100vh}header{background:linear-gradient(90deg,#220025,#470032,#220025);padding:15px;text-align:center;font-size:22px;font-weight:900;letter-spacing:3px}main{max-width:1080px;margin:auto;padding:12px}h1{font-size:clamp(24px,5vw,47px);text-align:center;margin:10px 0;color:#c3eaff;text-shadow:0 0 8px #00baff,0 0 25px #00aaff;letter-spacing:3px}.info{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}.panel{background:#07123cdd;border:2px solid #4cbaff;box-shadow:inset 0 0 14px #178fff,0 0 10px #116ad4;border-radius:8px;padding:9px}.info .panel{flex:1;min-width:130px;text-align:center}.tiny{font-size:11px;color:#a4d8ff;letter-spacing:1px}.value{font-size:23px;color:#70fa50;font-weight:bold;margin-top:4px}.pay{margin:10px auto;max-width:780px;text-align:center;font-size:12px;line-height:1.8}.pay span{display:inline-block;padding:2px 8px}.arena{position:relative;display:flex;gap:10px;align-items:center;justify-content:center;margin:20px auto 12px;flex-wrap:nowrap}.set{min-width:0;flex:1;text-align:center;z-index:2}.reels{height:clamp(170px,25vw,245px);border:7px ridge #91a7c2;border-radius:12px;background:linear-gradient(90deg,#061229,#0a63a1 50%,#061229);box-shadow:inset 0 0 30px #000,0 0 9px #5ac8ff;display:flex;flex-direction:column;align-items:center;justify-content:space-around;padding:8px}.die{height:clamp(43px,6vw,66px);width:clamp(43px,6vw,66px);border-radius:10px;border:2px solid #ffffff80;box-shadow:inset -6px -6px 9px #0005,inset 4px 4px 8px #fff7,0 4px 9px #0009;display:grid;place-items:center;font-size:clamp(26px,4vw,40px);font-weight:bold;color:#fff;text-shadow:0 1px 4px #0009}.die[data-c="0"]{background:#215dd6}.die[data-c="1"]{background:#a82cbb}.die[data-c="2"]{background:#18a63e}.die[data-c="3"]{background:#e7bd19}.die[data-c="4"]{background:#c84c27}.die[data-c="5"]{background:#14a5ad}.die[data-c="6"]{background:#f6f6f6;color:#e12733}.set button{margin-top:8px;background:linear-gradient(#7dfb48,#23a700);border:2px solid #062400;color:white;font-weight:900;padding:9px 5px;width:88%;max-width:115px;cursor:pointer;border-radius:3px}.set button.off{background:#555;color:#bbb}.wheel{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);height:clamp(120px,25vw,270px);width:clamp(120px,25vw,270px);border-radius:50%;border:12px ridge #a4bad8;background:conic-gradient(#392f7c 0 45deg,#243a7c 45deg 90deg,#472c80 90deg 135deg,#25488c 135deg 180deg,#392f7c 180deg 225deg,#243a7c 225deg 270deg,#472c80 270deg 315deg,#25488c 315deg);box-shadow:0 0 20px #57c6ff;opacity:.85}.wheel:after{content:'✦';position:absolute;inset:30%;border-radius:50%;display:grid;place-items:center;background:#070b37;color:#65d9ff;font-size:45px}.wheel.spin{animation:turn .8s ease-in-out}@keyframes turn{to{transform:translate(-50%,-50%) rotate(720deg)}}.controls{display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:wrap;margin-top:15px}.control{background:#061039;border:2px solid #478aff;border-radius:7px;padding:10px 14px;color:#fff;cursor:pointer;font-size:17px;font-weight:bold}.spinbtn{background:linear-gradient(#75ff70,#00990b);color:#072100;border:3px solid #b3ff9d;font-size:22px;padding:14px 26px;border-radius:50px;box-shadow:0 0 17px #00ff5a}.spinbtn:disabled{opacity:.5}.message{text-align:center;min-height:40px;margin-top:14px;font-size:18px;font-weight:bold;color:#ffe86b;text-shadow:0 0 10px #e0a300}.foot{text-align:center;color:#aac2ed;font-size:12px;margin:25px 0} .win{animation:flash .4s 4}@keyframes flash{50%{filter:brightness(2.1)}}@media(max-width:600px){main{padding:6px}.arena{gap:4px}.reels{border-width:4px;padding:4px}.die{height:clamp(34px,9vw,50px);width:clamp(34px,9vw,50px);font-size:27px}.set button{font-size:11px;padding:7px 1px}.pay{font-size:10px}.control{font-size:14px;padding:8px}.spinbtn{font-size:18px;padding:12px 20px}}
-</style></head><body><header>🎲 DICE FORTUNE · FUN 🎲</header><main><h1>DICE FORTUNE</h1><div class="info"><div class="panel"><div class="tiny">VIRTUEEL SALDO</div><div class="value" id="balance">5000,00</div></div><div class="panel"><div class="tiny">INZET</div><div class="value" id="stake">0,20</div></div><div class="panel"><div class="tiny">LAATSTE WINST</div><div class="value" id="won">0,00</div></div></div><div class="panel pay"><b>PUNTEN PER WINLIJN</b><div>🎲 3 dezelfde kleur = 100 punten · 3 dezelfde ogen = 200 punten · beide = 500 punten</div><div>4 winnende sets = 2× prijs · bonusrad = willekeurige extra prijs</div></div><div class="arena"><div class="wheel" id="wheel"></div><div class="set"><div class="reels" id="r0"></div><button data-set="0">SET 1 ✓</button></div><div class="set"><div class="reels" id="r1"></div><button data-set="1">SET 2 ✓</button></div><div class="set"><div class="reels" id="r2"></div><button data-set="2">SET 3 ✓</button></div><div class="set"><div class="reels" id="r3"></div><button data-set="3">SET 4 ✓</button></div></div><div class="controls"><button class="control" id="minus">− INZET</button><button class="spinbtn" id="spin">⟳ DRAAI</button><button class="control" id="plus">+ INZET</button><button class="control" id="sound">🔊</button><button class="control" id="reset">↺ RESET</button></div><div class="message" id="msg" aria-live="polite">Selecteer je sets en druk op DRAAI!</div><div class="foot">Alleen voor amusement · Geen echt geld · Geen prijzen · Onafhankelijk spel, niet verbonden aan Napoleon Casino.</div></main><script>
-let balance=5000,bet=.2,win=0,active=[true,true,true,true],busy=false,sound=true;const colors=7,faces=['⚀','⚁','⚂','⚃','⚄','⚅'];let current=Array.from({length:4},()=>Array.from({length:3},randomDie));function randomDie(){return {c:Math.floor(Math.random()*colors),v:Math.floor(Math.random()*6)}}function fmt(n){return n.toFixed(2).replace('.',',')}function beep(f=440,d=.09){if(!sound)return;try{const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();o.frequency.value=f;o.type='sine';g.gain.value=.045;o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+d);o.onended=()=>a.close()}catch(e){}}function draw(){document.getElementById('balance').textContent=fmt(balance);document.getElementById('stake').textContent=fmt(bet);document.getElementById('won').textContent=fmt(win);current.forEach((set,i)=>{document.getElementById('r'+i).innerHTML=set.map(x=>`<div class="die" data-c="${x.c}">${faces[x.v]}</div>`).join('')});document.querySelectorAll('[data-set]').forEach((b,i)=>{b.classList.toggle('off',!active[i]);b.textContent='SET '+(i+1)+(active[i]?' ✓':' ✕')})}document.querySelectorAll('[data-set]').forEach(b=>b.onclick=()=>{if(busy)return;let i=+b.dataset.set;if(active[i]&&active.filter(Boolean).length===1)return;active[i]=!active[i];beep(480);draw()});document.getElementById('minus').onclick=()=>{if(busy)return;bet=Math.max(.1,Math.round((bet-.1)*100)/100);draw()};document.getElementById('plus').onclick=()=>{if(busy)return;bet=Math.min(5,Math.round((bet+.1)*100)/100);draw()};document.getElementById('sound').onclick=()=>{sound=!sound;document.getElementById('sound').textContent=sound?'🔊':'🔇'};document.getElementById('reset').onclick=()=>{if(busy)return;balance=5000;win=0;bet=.2;document.getElementById('msg').textContent='Nieuwe speelronde!';draw()};document.getElementById('spin').onclick=async()=>{if(busy)return;const cost=bet*active.filter(Boolean).length;if(balance<cost){document.getElementById('msg').textContent='Te weinig credits. Druk op RESET.';return}busy=true;document.getElementById('spin').disabled=true;balance=Math.round((balance-cost)*100)/100;win=0;document.getElementById('msg').textContent='De dobbelstenen draaien...';document.getElementById('wheel').classList.add('spin');let ticks=0;const timer=setInterval(()=>{current=current.map((set,i)=>active[i]?Array.from({length:3},randomDie):set);draw();beep(250+ticks*20,.035);ticks++},85);await new Promise(r=>setTimeout(r,1050));clearInterval(timer);document.getElementById('wheel').classList.remove('spin');let winningSets=0,points=0;current.forEach((set,i)=>{if(!active[i])return;let sameColor=set.every(x=>x.c===set[0].c),sameFace=set.every(x=>x.v===set[0].v);let p=sameColor&&sameFace?500:sameFace?200:sameColor?100:0;if(p){winningSets++;points+=p;document.getElementById('r'+i).classList.add('win');setTimeout(()=>document.getElementById('r'+i).classList.remove('win'),1800)}});if(winningSets===4)points*=2;let bonus=Math.random()<.08?Math.floor(Math.random()*5+1)*20:0;win=Math.round((points/100*bet+bonus/100)*100)/100;balance=Math.round((balance+win)*100)/100;document.getElementById('msg').textContent=win>0?`🎉 GEWONNEN: ${fmt(win)} credits! ${bonus?'Bonusrad: '+bonus+' punten!':''}`:'Geen winst deze ronde. Probeer opnieuw!';if(win)for(let i=0;i<3;i++)setTimeout(()=>beep(550+i*140,.16),i*190);busy=false;document.getElementById('spin').disabled=false;draw()};draw();
-</script></body></html>
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#080a25">
+  <title>Dice Fortune Fun 2.0</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #eef4ff;
+      background: #080a25;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      --panel: #111532;
+      --edge: #68789d;
+      --cyan: #67d8ff;
+      --gold: #f7d983;
+      --muted: #aab5d2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 50% 35%, #263779 0, #12163d 42%, #080a25 100%);
+    }
+
+    button { font: inherit; }
+
+    .game {
+      width: min(100%, 1500px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: clamp(10px, 2vw, 24px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.4vh, 15px);
+    }
+
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 2px 6px;
+    }
+
+    .brand {
+      margin: 0;
+      color: #e8f5ff;
+      font-size: clamp(20px, 3vw, 34px);
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-shadow: 0 0 16px #27bfff90;
+    }
+
+    .brand span { color: var(--gold); }
+
+    .offline {
+      color: #a6f2c0;
+      font-size: clamp(10px, 1.2vw, 13px);
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .status-card, .paytable, .lane, .bonus-card, .control-bar {
+      border: 1px solid #7283aa;
+      background: linear-gradient(145deg, #1d2348ee, #0d112eea);
+      box-shadow: inset 0 1px #ffffff18, 0 5px 16px #0005;
+    }
+
+    .status-card {
+      min-width: 0;
+      padding: 8px 12px;
+      border-radius: 9px;
+      text-align: center;
+    }
+
+    .status-label {
+      color: var(--muted);
+      font-size: clamp(9px, 1vw, 12px);
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .status-value {
+      margin-top: 3px;
+      overflow: hidden;
+      color: #f7f9ff;
+      font-size: clamp(16px, 2.15vw, 25px);
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .status-value.balance { color: #9af4be; }
+    .status-value.stake { color: #ffe29a; }
+    .status-value.winnings { color: var(--cyan); }
+
+    .paytable {
+      border-radius: 9px;
+      padding: 7px 12px;
+    }
+
+    .paytable summary {
+      color: #d7e4ff;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .07em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .paytable-content {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px 20px;
+      padding: 7px 0 2px;
+      color: #d6def3;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .paytable-content strong { color: var(--gold); }
+    .assumption { color: #ffc98a; }
+    .paytable-content p { width: 100%; margin: 0; }
+    .paytable-content table { border-collapse: collapse; min-width: min(100%, 520px); }
+    .paytable-content th, .paytable-content td { padding: 3px 12px; border-bottom: 1px solid #ffffff20; }
+    .paytable-content th { color: var(--cyan); }
+
+    .board {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(100px, .75fr) minmax(0, 1fr) minmax(0, 1fr);
+      align-items: stretch;
+      gap: clamp(6px, 1vw, 14px);
+      min-height: 245px;
+    }
+
+    .lane {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 7px;
+      padding: clamp(7px, 1.2vw, 14px) 5px;
+      border-width: 2px;
+      border-radius: 13px;
+      background: linear-gradient(180deg, #273456, #10152e 55%, #202747);
+      box-shadow: inset 0 0 22px #05091a, 0 6px 18px #0008;
+    }
+
+    .lane-heading {
+      color: #d5dff9;
+      font-size: clamp(10px, 1.3vw, 15px);
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .dice-column {
+      width: 100%;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      gap: 5px;
+    }
+
+    .die {
+      width: clamp(39px, 6vw, 68px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 2px solid #ffffffba;
+      border-radius: 13px;
+      background: var(--die-color, #3475d2);
+      box-shadow: inset 4px 5px 8px #ffffff58, inset -6px -8px 9px #0007, 0 5px 8px #0009;
+      transform: translateZ(0);
+    }
+
+    .pip-grid {
+      width: 70%;
+      height: 70%;
+      display: grid;
+      grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+      place-items: center;
+    }
+
+    .pip {
+      width: 65%;
+      height: 65%;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 1px 2px #0008;
+      visibility: hidden;
+    }
+
+    [data-face="1"] .pip:nth-child(5),
+    [data-face="2"] .pip:nth-child(1),
+    [data-face="2"] .pip:nth-child(9),
+    [data-face="3"] .pip:nth-child(1),
+    [data-face="3"] .pip:nth-child(5),
+    [data-face="3"] .pip:nth-child(9),
+    [data-face="4"] .pip:nth-child(1),
+    [data-face="4"] .pip:nth-child(3),
+    [data-face="4"] .pip:nth-child(7),
+    [data-face="4"] .pip:nth-child(9),
+    [data-face="5"] .pip:nth-child(1),
+    [data-face="5"] .pip:nth-child(3),
+    [data-face="5"] .pip:nth-child(5),
+    [data-face="5"] .pip:nth-child(7),
+    [data-face="5"] .pip:nth-child(9),
+    [data-face="6"] .pip:nth-child(1),
+    [data-face="6"] .pip:nth-child(3),
+    [data-face="6"] .pip:nth-child(4),
+    [data-face="6"] .pip:nth-child(6),
+    [data-face="6"] .pip:nth-child(7),
+    [data-face="6"] .pip:nth-child(9) { visibility: visible; }
+
+    .line-toggle, .action {
+      border: 1px solid #8898bb;
+      color: #ecf1ff;
+      cursor: pointer;
+      font-weight: 800;
+      transition: transform .12s ease, filter .12s ease, opacity .12s ease;
+    }
+
+    .line-toggle {
+      width: 100%;
+      min-height: 34px;
+      border-radius: 7px;
+      background: linear-gradient(#384368, #222b4a);
+      font-size: clamp(10px, 1.1vw, 13px);
+    }
+
+    .line-toggle[aria-pressed="true"] {
+      border-color: #69e6a3;
+      background: linear-gradient(#277d60, #14513f);
+    }
+
+    .line-toggle:disabled, .action:disabled {
+      cursor: default;
+      opacity: .48;
+    }
+
+    button:not(:disabled):active { transform: translateY(1px) scale(.98); }
+    button:focus-visible, summary:focus-visible { outline: 3px solid #8ce5ff; outline-offset: 2px; }
+
+    .bonus-card {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px 4px;
+      border-color: #c8a75d;
+      border-radius: 13px;
+      text-align: center;
+    }
+
+    .bonus-title {
+      color: var(--gold);
+      font-size: clamp(9px, 1.15vw, 13px);
+      font-weight: 900;
+      letter-spacing: .12em;
+    }
+
+    .wheel {
+      width: clamp(66px, 10vw, 116px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 6px ridge #d3b86e;
+      border-radius: 50%;
+      background: conic-gradient(
+        #4d3c8c 0 45deg, #1c6580 45deg 90deg,
+        #765234 90deg 135deg, #34508f 135deg 180deg,
+        #4d3c8c 180deg 225deg, #1c6580 225deg 270deg,
+        #765234 270deg 315deg, #34508f 315deg
+      );
+      box-shadow: 0 0 18px #d1ad5580, inset 0 0 10px #0009;
+    }
+
+    .wheel-core {
+      width: 44%;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 2px solid #e8d18c;
+      border-radius: 50%;
+      background: radial-gradient(circle, #26355d, #11142a);
+      color: #ffdf82;
+      font-size: clamp(17px, 2.4vw, 26px);
+      font-weight: 900;
+      text-shadow: 0 0 10px #ffe894;
+    }
+
+    .wheel.is-spinning { animation: wheel-spin 1.15s cubic-bezier(.15,.65,.25,1); }
+    @keyframes wheel-spin { to { transform: rotate(900deg); } }
+    .bonus-state { min-height: 28px; color: #e6d9ac; font-size: 10px; line-height: 1.35; }
+
+    .control-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 9px;
+      border-radius: 12px;
+    }
+
+    .action {
+      min-height: 42px;
+      border-radius: 8px;
+      background: linear-gradient(#364369, #222a48);
+      box-shadow: inset 0 1px #ffffff30;
+      padding: 8px 15px;
+    }
+
+    .action.spin {
+      min-width: clamp(130px, 19vw, 215px);
+      border: 2px solid #bcf6cb;
+      background: linear-gradient(#83e69d, #298250);
+      color: #081d14;
+      font-size: clamp(16px, 2.2vw, 23px);
+      letter-spacing: .08em;
+      text-shadow: 0 1px #ffffff60;
+    }
+
+    .round-message {
+      min-height: 25px;
+      color: #ffe9a7;
+      font-size: clamp(13px, 1.6vw, 18px);
+      font-weight: 800;
+      text-align: center;
+      text-shadow: 0 2px 8px #000;
+    }
+
+    .fine-print {
+      margin: 0;
+      color: #aab5d2;
+      font-size: 10px;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .win-flash { animation: win-flash .42s ease-in-out 4; }
+    @keyframes win-flash { 50% { filter: brightness(1.9); } }
+
+    @media (max-width: 700px) {
+      .game { padding: 7px; gap: 7px; }
+      .board { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; }
+      .bonus-card { grid-column: 1 / -1; flex-direction: row; min-height: 78px; }
+      .wheel { width: 58px; border-width: 4px; }
+      .bonus-state { max-width: 150px; }
+      .control-bar { gap: 5px; padding: 6px; }
+      .action { min-height: 37px; padding: 6px 9px; }
+    }
+
+    @media (max-height: 620px) and (min-width: 701px) {
+      .game { padding-top: 8px; padding-bottom: 8px; gap: 6px; }
+      .status-card { padding: 5px 8px; }
+      .board { min-height: 190px; }
+      .lane { padding-top: 6px; padding-bottom: 6px; }
+      .die { width: clamp(35px, 5.2vw, 56px); }
+      .control-bar { padding: 6px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="game">
+    <header class="masthead">
+      <h1 class="brand">DICE <span>FORTUNE</span> FUN 2.0</h1>
+      <div class="offline">● OFFLINE · VIRTUELE CREDITS</div>
+    </header>
+
+    <section class="status-grid" aria-label="Speloverzicht">
+      <div class="status-card">
+        <div class="status-label">Virtueel saldo</div>
+        <div class="status-value balance" id="balance">5.000,00</div>
+      </div>
+      <div class="status-card">
+        <div class="status-label">Inzet per set</div>
+        <div class="status-value stake" id="stake">0,20</div>
+      </div>
+      <div class="status-card">
+        <div class="status-label">Laatste winst</div>
+        <div class="status-value winnings" id="last-win">0,00</div>
+      </div>
+      <div class="status-card">
+        <div class="status-label">Totaal gewonnen</div>
+        <div class="status-value" id="total-winnings">0,00</div>
+      </div>
+    </section>
+
+    <details class="paytable">
+      <summary>Spelregels &amp; paytable</summary>
+      <div class="paytable-content">
+        <table>
+          <thead><tr><th>Combinatie (3 dobbelstenen)</th><th>Punten</th><th>Uitbetaling per set</th></tr></thead>
+          <tbody>
+            <tr><td>Dezelfde kleur én ogen</td><td>500</td><td>5 × inzet</td></tr>
+            <tr><td>Dezelfde ogen</td><td>200</td><td>2 × inzet</td></tr>
+            <tr><td>Dezelfde kleur</td><td>100</td><td>1 × inzet</td></tr>
+            <tr><td>Geen combinatie</td><td>0</td><td>0</td></tr>
+          </tbody>
+        </table>
+        <p>Uitbetaling = punten × inzet ÷ 100. Inzet wordt per actieve set ingezet; alle 4 winnend verdubbelt de basispunten.</p>
+        <p class="assumption">Bonusrad: onzekere prototype-regel (8% kans; 0,20–1,00 credits), niet geverifieerd.</p>
+      </div>
+    </details>
+
+    <section class="board" aria-label="Dobbelspel">
+      <article class="lane" data-lane="0">
+        <div class="lane-heading">SET 1</div>
+        <div class="dice-column" id="dice-0" aria-label="Dobbelstenen set 1"></div>
+        <button class="line-toggle" type="button" data-set="0" aria-pressed="true">ACTIEF</button>
+      </article>
+      <article class="lane" data-lane="1">
+        <div class="lane-heading">SET 2</div>
+        <div class="dice-column" id="dice-1" aria-label="Dobbelstenen set 2"></div>
+        <button class="line-toggle" type="button" data-set="1" aria-pressed="true">ACTIEF</button>
+      </article>
+
+      <aside class="bonus-card" aria-label="Bonusrad">
+        <div class="bonus-title">BONUSRAD</div>
+        <div class="wheel" id="wheel" aria-hidden="true"><div class="wheel-core">★</div></div>
+        <div class="bonus-state" id="bonus-state">Bonusregel uit prototype</div>
+      </aside>
+
+      <article class="lane" data-lane="2">
+        <div class="lane-heading">SET 3</div>
+        <div class="dice-column" id="dice-2" aria-label="Dobbelstenen set 3"></div>
+        <button class="line-toggle" type="button" data-set="2" aria-pressed="true">ACTIEF</button>
+      </article>
+      <article class="lane" data-lane="3">
+        <div class="lane-heading">SET 4</div>
+        <div class="dice-column" id="dice-3" aria-label="Dobbelstenen set 4"></div>
+        <button class="line-toggle" type="button" data-set="3" aria-pressed="true">ACTIEF</button>
+      </article>
+    </section>
+
+    <div class="control-bar" aria-label="Spelbediening">
+      <button class="action" id="stake-down" type="button" aria-label="Verlaag inzet">− Inzet</button>
+      <button class="action spin" id="spin" type="button">🎲 DRAAI</button>
+      <button class="action" id="stake-up" type="button" aria-label="Verhoog inzet">+ Inzet</button>
+      <button class="action" id="sound" type="button" aria-pressed="true">🔊 Geluid</button>
+      <button class="action" id="reset" type="button">↺ Opnieuw</button>
+    </div>
+
+    <div class="round-message" id="message" aria-live="polite">Kies je sets en druk op DRAAI.</div>
+    <p class="fine-print">Alleen voor amusement. Geen echt geld, prijzen, advertenties, accounts of internetverbinding. Onafhankelijke fan-game; niet verbonden aan Stakelogic of Napoleon Casino.</p>
+  </main>
+
+  <script src="game-engine.js"></script>
+  <script>
+    "use strict";
+
+    const engine = window.DiceGameEngine;
+    const colors = ["#397bd5", "#a24db9", "#35a46a", "#c5a53a", "#c56046", "#329da8", "#ece9e1"];
+    const state = {
+      balanceCents: 500000,
+      stakeCents: 20,
+      lastWinCents: 0,
+      totalWinningsCents: 0,
+      active: [true, true, true, true],
+      dice: Array.from({ length: engine.SET_COUNT }, function () { return engine.rollSet(); }),
+      busy: false,
+      soundOn: true
+    };
+
+    const audioConstructor = window.AudioContext || window.webkitAudioContext;
+    let audioContext = null;
+
+    function formatCredits(cents) {
+      return new Intl.NumberFormat("nl-BE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(cents / 100);
+    }
+
+    function renderDie(die) {
+      const pips = Array.from({ length: 9 }, function () { return "<i class=\"pip\"></i>"; }).join("");
+      return "<div class=\"die\" style=\"--die-color:" + colors[die.color] +
+        "\" role=\"img\" aria-label=\"" + die.face + " ogen\">" +
+        "<div class=\"pip-grid\" data-face=\"" + die.face + "\">" + pips + "</div></div>";
+    }
+
+    function renderDice() {
+      state.dice.forEach(function (set, index) {
+        document.getElementById("dice-" + index).innerHTML = set.map(renderDie).join("");
+      });
+    }
+
+    function renderStatus() {
+      document.getElementById("balance").textContent = formatCredits(state.balanceCents);
+      document.getElementById("stake").textContent = formatCredits(state.stakeCents);
+      document.getElementById("last-win").textContent = formatCredits(state.lastWinCents);
+      document.getElementById("total-winnings").textContent = formatCredits(state.totalWinningsCents);
+      document.querySelectorAll("[data-set]").forEach(function (button, index) {
+        button.setAttribute("aria-pressed", String(state.active[index]));
+        button.textContent = state.active[index] ? "ACTIEF" : "UIT";
+        button.disabled = state.busy ||
+          (state.active[index] && state.active.filter(Boolean).length === 1);
+      });
+      document.querySelectorAll(".action").forEach(function (button) {
+        if (button.id !== "sound") button.disabled = state.busy;
+      });
+      document.getElementById("spin").disabled = state.busy;
+      document.getElementById("sound").setAttribute("aria-pressed", String(state.soundOn));
+      document.getElementById("sound").textContent = state.soundOn ? "🔊 Geluid" : "🔇 Geluid";
+    }
+
+    function playTone(frequency, duration) {
+      if (!state.soundOn || !audioConstructor) return;
+      if (!audioContext) audioContext = new audioConstructor();
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      oscillator.type = "sine";
+      oscillator.frequency.value = frequency;
+      gain.gain.setValueAtTime(0.035, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + duration);
+    }
+
+    function setMessage(text) {
+      document.getElementById("message").textContent = text;
+    }
+
+    function wait(milliseconds) {
+      return new Promise(function (resolve) { window.setTimeout(resolve, milliseconds); });
+    }
+
+    document.querySelectorAll("[data-set]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        if (state.busy) return;
+        const index = Number(button.dataset.set);
+        if (state.active[index] && state.active.filter(Boolean).length === 1) return;
+        state.active[index] = !state.active[index];
+        playTone(480, 0.06);
+        renderStatus();
+      });
+    });
+
+    document.getElementById("stake-down").addEventListener("click", function () {
+      state.stakeCents = Math.max(engine.MIN_STAKE_CENTS, state.stakeCents - 10);
+      renderStatus();
+    });
+
+    document.getElementById("stake-up").addEventListener("click", function () {
+      state.stakeCents = Math.min(engine.MAX_STAKE_CENTS, state.stakeCents + 10);
+      renderStatus();
+    });
+
+    document.getElementById("sound").addEventListener("click", function () {
+      state.soundOn = !state.soundOn;
+      if (state.soundOn) playTone(520, 0.07);
+      renderStatus();
+    });
+
+    document.getElementById("reset").addEventListener("click", function () {
+      if (state.busy) return;
+      state.balanceCents = 500000;
+      state.stakeCents = 20;
+      state.lastWinCents = 0;
+      state.totalWinningsCents = 0;
+      state.active = [true, true, true, true];
+      state.dice = Array.from({ length: engine.SET_COUNT }, function () { return engine.rollSet(); });
+      document.getElementById("bonus-state").textContent = "Bonusregel uit prototype";
+      setMessage("Nieuw spel: je credits zijn teruggezet.");
+      renderDice();
+      renderStatus();
+    });
+
+    document.getElementById("spin").addEventListener("click", async function () {
+      if (state.busy) return;
+      const activeCount = state.active.filter(Boolean).length;
+      const wagerCents = state.stakeCents * activeCount;
+      if (state.balanceCents < wagerCents) {
+        setMessage("Niet genoeg credits. Kies Opnieuw om gratis te resetten.");
+        return;
+      }
+
+      state.busy = true;
+      state.lastWinCents = 0;
+      const targetDice = state.dice.map(function (set, index) {
+        return state.active[index] ? engine.rollSet() : set;
+      });
+      const result = engine.calculateSpin({
+        sets: targetDice,
+        active: state.active.slice(),
+        stakeCents: state.stakeCents
+      });
+      const settlement = engine.settleBalance(
+        state.balanceCents,
+        state.stakeCents,
+        activeCount,
+        result.payoutCents
+      );
+      state.balanceCents -= settlement.wagerCents;
+      renderStatus();
+      setMessage("De dobbelstenen rollen…");
+      document.getElementById("bonus-state").textContent = "Veel succes!";
+      const wheel = document.getElementById("wheel");
+      wheel.classList.remove("is-spinning");
+      if (result.bonusCents > 0) {
+        void wheel.offsetWidth;
+        wheel.classList.add("is-spinning");
+      }
+
+      let ticks = 0;
+      const timer = window.setInterval(function () {
+        state.dice = state.dice.map(function (set, index) {
+          return state.active[index] ? engine.rollSet() : set;
+        });
+        renderDice();
+        playTone(240 + ticks * 18, 0.045);
+        ticks += 1;
+      }, 85);
+      await wait(1020);
+      window.clearInterval(timer);
+
+      state.dice = targetDice;
+      state.balanceCents += result.payoutCents;
+      state.lastWinCents = result.payoutCents;
+      state.totalWinningsCents += result.payoutCents;
+      result.lines.forEach(function (line) {
+        if (line.points > 0) {
+          const lane = document.querySelector('[data-lane="' + line.index + '"]');
+          lane.classList.add("win-flash");
+          window.setTimeout(function () { lane.classList.remove("win-flash"); }, 1700);
+        }
+      });
+
+      if (result.bonusCents > 0) {
+        document.getElementById("bonus-state").textContent =
+          "+" + formatCredits(result.bonusCents) + " credits";
+      } else {
+        document.getElementById("bonus-state").textContent = "Geen bonus";
+      }
+      if (result.payoutCents > 0) {
+        const bonusText = result.bonusCents > 0
+          ? " Inclusief " + formatCredits(result.bonusCents) + " bonuscredits."
+          : "";
+        setMessage("Gewonnen: " + formatCredits(result.payoutCents) + " credits!" + bonusText);
+        playTone(560, 0.18);
+        window.setTimeout(function () { playTone(740, 0.2); }, 160);
+      } else {
+        setMessage("Geen winst deze ronde. Je credits zijn alleen virtueel.");
+      }
+      state.busy = false;
+      renderDice();
+      renderStatus();
+    });
+
+    renderDice();
+    renderStatus();
+  </script>
+</body>
+</html>
